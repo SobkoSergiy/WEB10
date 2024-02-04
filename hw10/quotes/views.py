@@ -14,18 +14,20 @@ def main_view(request, page=1):
     return render(request, "quotes/main.html", context={'quotes': page_quotes})
 
 
-def main_view_tag(request, page=1, tag_name=''):
-    req = request.POST.getlist('tags')
-    print(f"req={req!r}")
-    choice_tags = Tag.objects.filter(name__in=request.POST.getlist('tags'), quote=request.user)
-    print(f"choice_tags= {choice_tags!r}")
+def get_tagquotes(quotes, tag_name):
+    tagquotes = []
+    for quote in quotes:
+        for name in quote.tags.all():
+            if tag_name == str(name):
+                tagquotes.append(quote)
+                break
+    return tagquotes
 
+
+def main_view_tag(request, page=1, tag_name=''):
     quotes = Quote.objects.all()
-    row_cnt = 10
-    paginator = Paginator(list(quotes), row_cnt)
-    page_quotes = paginator.page(page)
-    
-    return render(request, "quotes/main.html", context={'quotes': page_quotes})
+    tagquotes = quotes if tag_name == '' else get_tagquotes(quotes, tag_name)
+    return render(request, "quotes/main.html", context={'quotes': tagquotes})
 
 
 @login_required
