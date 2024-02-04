@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home Work Quotes</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'quotes/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'quotes/main.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row header-box">
+            <div class="col-md-8">
+                <h1>
+                    <a href="/" style="text-decoration: none">Home Work: Quotes</a>
+                </h1>
+            </div>
+        </div>
+        
+        {% load extract %}
+        <div class="row">
+            <div class="col-md-8">
+
+                {% for quote in quotes %}
+                <div class="quote">
+                    <span class="text" itemprop="text">{{quote.quote}}</span>
+                    <span>by <small class="author" itemprop="author">{{quote.author.fullname}}</small>
+                        <a href="{% url 'quotes:author_show' quote.author.id %}" role="button">(about)</a>
+                    </span>
+                    <div class="tags">
+                        Tags:
+                        <a class="tag" href="/tag/{{quote.tags|qtags}}">{{quote.tags|qtags}}</a>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <nav>
+                    <ul class="pager">
+                        {% if quotes.has_previous %}
+                        <li class="previous">
+                            <a href="{% url 'quotes:main_paginate' quotes.previous_page_number %}"><span aria-hidden="true">&larr;</span> Previous</a>
+                        </li>
+                        {% endif %}                        
+
+                        {% if quotes.has_next %}
+                        <li class="next">
+                            <a href="{% url 'quotes:main_paginate' quotes.next_page_number %}">Next<span aria-hidden="true">&rarr;</span></a>
+                        </li>
+                        {% endif %}  
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="col-md-4 tags-box">
+                {% if user.is_authenticated %}
+
+                <h2 style="text-align: center">Welcome <b>{{ user.username }}!</b></h2>
+
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 22px" href="{% url 'users:logout' %}" role="button">Logout</a>
+                </span>
+                <hr style="height: 2px;">
+                <span class="tag-item" style="text-align: center" >
+                    <a class="tag" style="font-size: 22px" href="{% url 'quotes:author' %}" role="button">Add author</a>
+                </span>
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 22px" href="{% url 'quotes:tag' %}" role="button">Add tag</a>
+                </span>
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 22px" href="{% url 'quotes:quote' %}" role="button">Add quotes</a>
+                </span>
+
+                {% else %}
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 22px" href="{% url 'users:signup' %}" role="button">Sign Up</a>
+                </span>
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 22px" href="{% url 'users:login' %}" role="button">Login</a>
+                </span>
+                {% endif %}
+
+                <hr style="height: 2px;">
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 22px" href="/">Main page</a>
+                </span>
+
+            </div>
+
+
+            <div class="col-md-4 tags-box">
+
+                <hr style="height: 2px;">
+                <h2 style="text-align: center">Top Ten tags</h2>
+
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 28px" href="{% url 'quotes:main_tag' 1 'love' %}">love</a>
+                </span>
+
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 26px" href="/tag/inspirational/">inspirational</a>
+                </span>
+
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 26px" href="/tag/life/">life</a>
+                </span>
+
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 22px" href="/tag/humor/">humor</a>
+                </span>
+
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 22px" href="/tag/books/">books</a>
+                </span>
+
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 16px" href="/tag/reading/">reading</a>
+                </span>
+
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 12px" href="/tag/friendship/">friendship</a>
+                </span>
+
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 12px" href="/tag/friends/">friends</a>
+                </span>
+
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 10px" href="/tag/truth/">truth</a>
+                </span>
+
+                <span class="tag-item" style="text-align: center">
+                    <a class="tag" style="font-size: 10px" href="/tag/simile/">simile</a>
+                </span>
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">
+                Quotes by: <a href="https://www.goodreads.com/quotes">GoodReads.com</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>
