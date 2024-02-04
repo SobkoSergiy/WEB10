@@ -31,7 +31,9 @@
                     </span>
                     <div class="tags">
                         Tags:
-                        <a class="tag" href="/tag/{{quote.tags|qtags}}">{{quote.tags|qtags}}</a>
+                        {% for tag in quote.tags|qtags %}
+                        <a class="tag" href="/tag/{{tag}}">{{tag}}</a>
+                        {% endfor %}
                     </div>
                 </div>
                 {% endfor %}
